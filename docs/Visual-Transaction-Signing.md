@@ -11,7 +11,7 @@ Conventionally, the `credentialId` is simply a random ID assigned to the authent
 Talisman, however, supports `credenaialId` value with data suffix, where the operation data for signing is appended to the authenticator identifier:
 
 ```
-final byte[] credentialId = ByteUtils.concat(authenticator.identifier, '&', operation.data)
+final byte[] credentialId = ByteUtils.concat(authenticator.identifier, operation.data)
 ```
 
 If you provide the concatenated identifier to `allowCredentials` item in the WebAuthn request (non-discoverable credentials only), Talisman checks if the provided `credentialId` **prefix** matches the expected authenticator identifier, and if it does, it looks at the data after such ID (validating the inputs for length and separators, of course). If the `credentialId` **suffix** matches the expected [operation data format](https://developers.wultra.com/components/enrollment-server/develop/documentation/Operation-Data), the authenticator displays a visual challenge and additionally signs the operation data.
