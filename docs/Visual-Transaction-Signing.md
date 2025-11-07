@@ -47,12 +47,12 @@ if (dataSuffix != null) {
     signableData = ByteUtils.concat(authData.getEncoded(), Hash.sha256(clientDataJSON.getEncoded()));
 }
 
-// Get public key
-final byte[] publicKeyBytes = authenticatorDetail.getPublicKeyBytes();
-final PublicKey publicKey = keyConvertor.convertBytesToPublicKey(publicKeyBytes);
+// Get authenticator's public key
+final Authenticator authenticator = service.getAuthenticatorForCredentialId(credentialId);
+final PublicKey publicKey = authenticator.getPublicKey();
 
-// Validate signature using desired algorithm
-return signatureUtils.validateECDSASignature(signableData, signature, publicKey);
+// Validate signature provided by authenticator
+return SignatureUtils.validateECDSASignature(signableData, signature, publicKey);
 ```
 
 This alternative matching does not conflict with the FIDO2 standard, as FIDO2 supports various interpretations of the `credentialId` value, including use cases such as stateless authenticators. The standard uses `byte[]` as the `credentialId` value type, to ensure the value can contain any data payload.
