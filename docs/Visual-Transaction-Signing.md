@@ -21,18 +21,20 @@ If you provide the concatenated identifier to `allowCredentials` item in the Web
 The PowerAuth server can then validate the alternate value of the assertion/signature based on the fact that it was calculated via Talisman (evidenced by the AAGUID value), like so:
 
 ```java
-// Get the challenge value from the assertion part related to client data
-final String challenge = clientDataJSON.getChallenge();
-
 // Determine if there is expected to be a data suffix (Talisman) or not (other FIDO2 devices)
 byte[] dataSuffix = null;
 if (Fido2DefaultAuthenticators.isWultraModel(aaguid)) {
-    final String[] split = challenge.split("&", 2);
-    if (split.length != 2) {
+
+    // Get the challenge value from the client data
+    final String challenge = clientDataJSON.getChallenge();
+
+    // Get the operation data for the challenge
+    final String operationData = service.getOperationDataForChallenge(challenge);
+    if (operationData == null) { // missing operation data
         return null;
     }
-    dataSuffix = split[1].getBytes(StandardCharsets.UTF_8);
-    if (dataSuffix == null) {
+    dataSuffix = operationData.getBytes(StandardCharsets.UTF_8);
+    if (dataSuffix == null) { // encoding error
         return null;
     }
 }
