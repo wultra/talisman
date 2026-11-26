@@ -4,7 +4,7 @@ Talisman devices are pre-personalized with information that can help you ensure 
 
 Talisman uses the following AAGUID values and attestation certificates:
 
-## Wultra Authenticator 1
+## Wultra Authenticator 1.1
 
 <table>
 <tr>
@@ -41,6 +41,7 @@ zus=
       </pre>
     </td>
 </tr>
+</table>
 
 ## Wultra Authenticator 1.2
 
